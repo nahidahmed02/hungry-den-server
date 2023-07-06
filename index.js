@@ -23,7 +23,16 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         await client.connect();
+        const foodsCollection = client.db('friendsKebab').collection('foodsCollection');
 
+        app.get('/foods', async (req, res) => {
+            const query = {};
+            const foods = await foodsCollection.find(query).toArray();
+            res.send(foods);
+        })
+
+    } catch (error) {
+        console.log(error);
     } finally {
         await client.close();
     }
