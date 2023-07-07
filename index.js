@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.h9tdnqu.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.2tc2nkt.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -23,18 +23,16 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         await client.connect();
+
         const foodsCollection = client.db('friendsKebab').collection('foodsCollection');
 
         app.get('/foods', async (req, res) => {
-            const query = {};
-            const foods = await foodsCollection.find(query).toArray();
+            const foods = await foodsCollection.find({}).toArray();
             res.send(foods);
         })
 
-    } catch (error) {
-        console.log(error);
     } finally {
-        await client.close();
+
     }
 }
 run().catch(console.dir);
