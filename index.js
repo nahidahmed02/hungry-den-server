@@ -24,11 +24,23 @@ async function run() {
     try {
         await client.connect();
 
+        // ==================== COLLECTIONS ====================
         const foodsCollection = client.db('friendsKebab').collection('foodsCollection');
+        const usersCollection = client.db('friendsKebab').collection('usersCollection');
 
+
+        // ==================== FOODS ====================
         app.get('/foods', async (req, res) => {
             const foods = await foodsCollection.find({}).toArray();
             res.send(foods);
+        })
+
+
+        // ==================== USERS ====================
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.send(result);
         })
 
     } finally {
