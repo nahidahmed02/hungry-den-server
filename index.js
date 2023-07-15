@@ -30,6 +30,7 @@ async function run() {
 
 
         // ==================== FOODS ====================
+
         app.get('/foods', async (req, res) => {
             const foods = await foodsCollection.find({}).toArray();
             res.send(foods);
@@ -37,6 +38,12 @@ async function run() {
 
 
         // ==================== USERS ====================
+
+        app.get('/users', async (req, res) => {
+            const users = await usersCollection.find().toArray();
+            res.send(users);
+        })
+
         app.post('/users', async (req, res) => {
             const user = req.body;
             const result = await usersCollection.insertOne(user);
