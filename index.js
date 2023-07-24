@@ -88,7 +88,18 @@ async function run() {
             const query = { email: email };
             const updatedDoc = {
                 $set: { role: 'dman' }
-            }
+            };
+            const result = await usersCollection.updateOne(query, updatedDoc);
+            res.send(result);
+        })
+
+        // to remove from admin role
+        app.put('/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const updatedDoc = {
+                $set: { role: 'user' }
+            };
             const result = await usersCollection.updateOne(query, updatedDoc);
             res.send(result);
         })
