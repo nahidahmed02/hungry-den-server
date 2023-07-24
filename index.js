@@ -104,6 +104,17 @@ async function run() {
             res.send(result);
         })
 
+        // to remove from delivery man role
+        app.put('/dman/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const updatedDoc = {
+                $set: { role: 'user' }
+            };
+            const result = await usersCollection.updateOne(query, updatedDoc);
+            res.send(result);
+        })
+
     } finally {
 
     }
