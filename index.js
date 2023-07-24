@@ -71,6 +71,17 @@ async function run() {
             res.send(result);
         })
 
+        // to give user the admin role
+        app.put('/users/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const updatedDoc = {
+                $set: { role: 'admin' }
+            }
+            const result = await usersCollection.updateOne(query, updatedDoc);
+            res.send(result);
+        })
+
     } finally {
 
     }
