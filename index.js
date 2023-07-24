@@ -82,6 +82,17 @@ async function run() {
             res.send(result);
         })
 
+        // to give user the delivery man role
+        app.put('/users/dman/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const updatedDoc = {
+                $set: { role: 'dman' }
+            }
+            const result = await usersCollection.updateOne(query, updatedDoc);
+            res.send(result);
+        })
+
     } finally {
 
     }
