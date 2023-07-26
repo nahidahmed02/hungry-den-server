@@ -4,7 +4,7 @@ const port = process.env.PORT || 5000;
 const cors = require('cors');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 // middleware
@@ -46,19 +46,30 @@ async function run() {
 
         // ==================== FOODS ====================
 
+        // to get all the foods
         app.get('/foods', async (req, res) => {
             const foods = await foodsCollection.find({}).toArray();
             res.send(foods);
         })
 
+        // to delete a food
+        app.delete('/foods/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await foodsCollection.deleteOne(query);
+            res.send(result);
+        })
+
 
         // ==================== USERS ====================
 
+        // to get all the users
         app.get('/users', async (req, res) => {
             const users = await usersCollection.find().toArray();
             res.send(users);
         })
 
+        // to store the user
         app.put('/users/:email', async (req, res) => {
             const user = req.body;
             const email = req.params.email;
