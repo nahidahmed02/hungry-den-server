@@ -28,6 +28,7 @@ async function run() {
         // ==================== COLLECTIONS ====================
         const foodsCollection = client.db('friendsKebab').collection('foodsCollection');
         const usersCollection = client.db('friendsKebab').collection('usersCollection');
+        const reviewsCollection = client.db('friendsKebab').collection('reviewsCollection');
 
 
         // ======================== JWT ========================
@@ -55,7 +56,7 @@ async function run() {
         // to delete a food
         app.delete('/foods/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: ObjectId(id) };
+            const query = { _id: new ObjectId(id) };
             const result = await foodsCollection.deleteOne(query);
             res.send(result);
         })
@@ -125,6 +126,17 @@ async function run() {
             const result = await usersCollection.updateOne(query, updatedDoc);
             res.send(result);
         })
+
+
+        // ==================== REVIEWS ====================
+
+        // to add reviews in DB
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviewsCollection.insertOne(review);
+            res.send(result);
+        })
+
 
     } finally {
 
