@@ -136,6 +136,13 @@ async function run() {
             res.send(result);
         })
 
+        // to get a user's review
+        app.get('/reviews/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const result = await reviewsCollection.find(query).toArray();
+            res.send(result);
+        })
 
         // to add reviews in DB
         app.post('/reviews', async (req, res) => {
