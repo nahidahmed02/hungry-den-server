@@ -130,6 +130,16 @@ async function run() {
 
         // ==================== REVIEWS ====================
 
+        // to get a specefic review
+        app.get('/reviews', async (req, res) => {
+            // const email = req.params.email;
+            // const query = { email };
+            const result = await reviewsCollection.find().toArray();
+            res.send(result);
+            console.log(result);
+        })
+
+
         // to add reviews in DB
         app.post('/reviews', async (req, res) => {
             const review = req.body;
