@@ -1,4 +1,5 @@
 const express = require('express');
+// const multer = require('multer');
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require('cors');
@@ -21,11 +22,23 @@ const client = new MongoClient(uri, {
     }
 });
 
+
+//  Multer configuration for file upload
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, Date.now() + '-' + file.originalname);
+//     }
+// })
+
+// const upload = multer({ storage });
+
+
 async function run() {
     try {
         await client.connect();
 
         // ==================== COLLECTIONS ====================
+        const profileCollection = client.db('friendsKebab').collection('profileCollection');
         const foodsCollection = client.db('friendsKebab').collection('foodsCollection');
         const usersCollection = client.db('friendsKebab').collection('usersCollection');
         const reviewsCollection = client.db('friendsKebab').collection('reviewsCollection');
@@ -43,6 +56,39 @@ async function run() {
             }
             res.status(403).send({ accessToken: '' })
         })
+
+
+        // ==================== PROFILE ====================
+
+        // to post the profile
+        app.post('/profile', async (req, res) => {
+            const profile = req.body;
+            const result = await profileCollection.insertOne(profile);
+            res.send(result);
+        })
+
+        // upload route
+        // app.post('/upload', upload.single('photo'), async (req, res) => {
+        //     try {
+        //         if (!req.file) {
+        //             return res.status(400).send({ message: 'No file uploaded' })
+        //         }
+
+        //         const email = req.params.email;
+        //         const fileDetails = {
+        //             email: email,
+        //             filename: req.file.filename,
+        //             originalname: req.file.originalname
+        //         }
+
+        //         const result = await profileCollection.insertOne(fileDetails);
+        //         res.send(result);
+
+        //     } catch (error) {
+        //         console.error('file uploading error', error);
+        //         res.status(500).send({ message: 'Internal server error' });
+        //     }
+        // })
 
 
         // ==================== FOODS ====================
