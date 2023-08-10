@@ -65,14 +65,14 @@ async function run() {
             const profile = req.body;
             const email = req.params.email;
             const query = { email };
-            const options = { upsert: true };
             const updatedDoc = {
                 $set: {
                     phone: profile.phone,
                     address: profile.address
                 }
-            }
-            const result = await profileCollection.updateOne(query, options, updatedDoc);
+            };
+            const options = { upsert: true };
+            const result = await profileCollection.updateOne(query, updatedDoc, options);
             res.send(result);
         })
 
