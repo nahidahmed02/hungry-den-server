@@ -60,10 +60,19 @@ async function run() {
 
         // ==================== PROFILE ====================
 
-        // to post the profile
-        app.post('/profile', async (req, res) => {
+        // to update a profile
+        app.put('/profile/:email', async (req, res) => {
             const profile = req.body;
-            const result = await profileCollection.insertOne(profile);
+            const email = req.params.email;
+            const query = { email };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    phone: profile.phone,
+                    address: profile.address
+                }
+            }
+            const result = await profileCollection.updateOne(query, options, updatedDoc);
             res.send(result);
         })
 
