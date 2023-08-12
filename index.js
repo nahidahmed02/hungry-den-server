@@ -60,6 +60,14 @@ async function run() {
 
         // ==================== PROFILE ====================
 
+        // to get a profile
+        app.get('/profile/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const result = await profileCollection.find(query).toArray();
+            res.send(result);
+        })
+
         // to update a profile
         app.put('/profile/:email', async (req, res) => {
             const profile = req.body;
