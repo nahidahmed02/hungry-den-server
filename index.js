@@ -83,6 +83,13 @@ async function run() {
             res.send(foods);
         })
 
+        // to add new food
+        app.post('/foods', async (req, res) => {
+            const food = req.body;
+            const result = await foodsCollection.insertOne(food);
+            res.send(result);
+        })
+
         // to delete a food
         app.delete('/foods/:id', async (req, res) => {
             const id = req.params.id;
