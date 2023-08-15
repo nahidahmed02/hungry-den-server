@@ -1,5 +1,4 @@
 const express = require('express');
-// const multer = require('multer');
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require('cors');
@@ -21,16 +20,6 @@ const client = new MongoClient(uri, {
         deprecationErrors: true,
     }
 });
-
-
-//  Multer configuration for file upload
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, Date.now() + '-' + file.originalname);
-//     }
-// })
-
-// const upload = multer({ storage });
 
 
 async function run() {
@@ -75,6 +64,7 @@ async function run() {
             const query = { email };
             const updatedDoc = {
                 $set: {
+                    profilePic: profile.profilePic,
                     phone: profile.phone,
                     address: profile.address
                 }
@@ -83,29 +73,6 @@ async function run() {
             const result = await profileCollection.updateOne(query, updatedDoc, options);
             res.send(result);
         })
-
-        // upload route
-        // app.post('/upload', upload.single('photo'), async (req, res) => {
-        //     try {
-        //         if (!req.file) {
-        //             return res.status(400).send({ message: 'No file uploaded' })
-        //         }
-
-        //         const email = req.params.email;
-        //         const fileDetails = {
-        //             email: email,
-        //             filename: req.file.filename,
-        //             originalname: req.file.originalname
-        //         }
-
-        //         const result = await profileCollection.insertOne(fileDetails);
-        //         res.send(result);
-
-        //     } catch (error) {
-        //         console.error('file uploading error', error);
-        //         res.status(500).send({ message: 'Internal server error' });
-        //     }
-        // })
 
 
         // ==================== FOODS ====================
