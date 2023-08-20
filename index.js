@@ -125,7 +125,7 @@ async function run() {
             const email = req.params.email;
             const query = { email: email };
             const updatedDoc = {
-                $set: { role: 'admin' }
+                $set: { role: 'Admin' }
             }
             const result = await usersCollection.updateOne(query, updatedDoc);
             res.send(result);
@@ -136,7 +136,7 @@ async function run() {
             const email = req.params.email;
             const query = { email: email };
             const updatedDoc = {
-                $set: { role: 'dman' }
+                $set: { role: 'D. Man' }
             };
             const result = await usersCollection.updateOne(query, updatedDoc);
             res.send(result);
@@ -147,7 +147,7 @@ async function run() {
             const email = req.params.email;
             const query = { email: email };
             const updatedDoc = {
-                $set: { role: 'user' }
+                $set: { role: 'User' }
             };
             const result = await usersCollection.updateOne(query, updatedDoc);
             res.send(result);
@@ -158,7 +158,7 @@ async function run() {
             const email = req.params.email;
             const query = { email: email };
             const updatedDoc = {
-                $set: { role: 'user' }
+                $set: { role: 'User' }
             };
             const result = await usersCollection.updateOne(query, updatedDoc);
             res.send(result);
