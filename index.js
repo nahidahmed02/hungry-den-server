@@ -27,10 +27,10 @@ async function run() {
         await client.connect();
 
         // ==================== COLLECTIONS ====================
-        const profileCollection = client.db('friendsKebab').collection('profileCollection');
-        const foodsCollection = client.db('friendsKebab').collection('foodsCollection');
-        const usersCollection = client.db('friendsKebab').collection('usersCollection');
-        const reviewsCollection = client.db('friendsKebab').collection('reviewsCollection');
+        const profileCollection = client.db('hungryDen').collection('profileCollection');
+        const foodsCollection = client.db('hungryDen').collection('foodsCollection');
+        const usersCollection = client.db('hungryDen').collection('usersCollection');
+        const reviewsCollection = client.db('hungryDen').collection('reviewsCollection');
 
 
         // ======================== JWT ========================
