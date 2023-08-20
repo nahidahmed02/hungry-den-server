@@ -205,7 +205,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('friends kebab server');
+    res.send('hungry den server');
 });
 
 app.listen(port, () => {
