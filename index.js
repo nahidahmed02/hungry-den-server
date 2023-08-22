@@ -30,6 +30,7 @@ async function run() {
         const profileCollection = client.db('hungryDen').collection('profileCollection');
         const foodsCollection = client.db('hungryDen').collection('foodsCollection');
         const usersCollection = client.db('hungryDen').collection('usersCollection');
+        const ordersCollection = client.db('hungryDen').collection('ordersCollection');
         const reviewsCollection = client.db('hungryDen').collection('reviewsCollection');
 
 
@@ -163,6 +164,17 @@ async function run() {
             const result = await usersCollection.updateOne(query, updatedDoc);
             res.send(result);
         })
+
+
+        // ==================== ORDERS ====================
+
+        // to place order
+        app.post('/order', async (req, res) => {
+            const order = req.body;
+            const result = await ordersCollection.insertOne(order);
+            res.send(result);
+        })
+
 
 
         // ==================== REVIEWS ====================
