@@ -175,6 +175,13 @@ async function run() {
             res.send(result);
         })
 
+        // to get order of a individual user
+        app.get('/order/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const result = await ordersCollection.find(query).toArray();
+            res.send(result);
+        })
 
 
         // ==================== REVIEWS ====================
