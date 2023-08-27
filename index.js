@@ -168,11 +168,10 @@ async function run() {
 
         // ==================== ORDERS ====================
 
-        // to place order
-        app.post('/order', async (req, res) => {
-            const order = req.body;
-            const result = await ordersCollection.insertOne(order);
-            res.send(result);
+        // to get orders of all users
+        app.get('/order', async (req, res) => {
+            const orders = await ordersCollection.find({}).toArray();
+            res.send(orders);
         })
 
         // to get order of a individual user
@@ -180,6 +179,13 @@ async function run() {
             const email = req.params.email;
             const query = { email };
             const result = await ordersCollection.find(query).toArray();
+            res.send(result);
+        })
+
+        // to place order
+        app.post('/order', async (req, res) => {
+            const order = req.body;
+            const result = await ordersCollection.insertOne(order);
             res.send(result);
         })
 
