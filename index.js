@@ -189,6 +189,23 @@ async function run() {
             res.send(result);
         })
 
+        // to update order
+        app.put('/order/assignDMan/:email', async (req, res) => {
+            const dManInfo = req.body;
+            const email = req.params.email;
+            const query = { email };
+            const updatedDoc = {
+                $set: {
+                    deliveryStatus: 'On Shipment',
+                    dManInfo
+                }
+            };
+            const options = { upsert: true };
+            const result = await ordersCollection.updateOne(query, updatedDoc, options);
+            res.send(result);
+        })
+
+
 
         // ==================== REVIEWS ====================
 
