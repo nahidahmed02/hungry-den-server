@@ -174,7 +174,7 @@ async function run() {
             res.send(orders);
         })
 
-        // to get order of a individual user
+        // to get order of an individual user
         app.get('/order/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email };
@@ -189,7 +189,7 @@ async function run() {
             res.send(result);
         })
 
-        // to update order
+        // to update order with a assigned delivery man
         app.put('/order/assignDMan/:email', async (req, res) => {
             const dManInfo = req.body;
             const email = req.params.email;
@@ -205,6 +205,17 @@ async function run() {
             res.send(result);
         })
 
+        // to update an order by completing delivery
+        app.put('/order/completed/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const updatedDoc = {
+                $set: { deliveryStatus: 'Completed' }
+            };
+            const options = { upsert: true };
+            const result = await ordersCollection.updateOne(query, updatedDoc, options);
+            res.send(result);
+        })
 
 
         // ==================== REVIEWS ====================
@@ -215,7 +226,7 @@ async function run() {
             res.send(result);
         })
 
-        // to get a user's review
+        // to get individual user's review
         app.get('/reviews/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email };
