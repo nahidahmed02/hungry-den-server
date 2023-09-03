@@ -29,6 +29,7 @@ async function run() {
         // ==================== COLLECTIONS ====================
         const profileCollection = client.db('hungryDen').collection('profileCollection');
         const foodsCollection = client.db('hungryDen').collection('foodsCollection');
+        const eventsCollection = client.db('hungryDen').collection('eventsCollection');
         const usersCollection = client.db('hungryDen').collection('usersCollection');
         const ordersCollection = client.db('hungryDen').collection('ordersCollection');
         const reviewsCollection = client.db('hungryDen').collection('reviewsCollection');
@@ -96,6 +97,15 @@ async function run() {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await foodsCollection.deleteOne(query);
+            res.send(result);
+        })
+
+
+        // ==================== EVENTS ====================
+
+        // to get all events
+        app.get('/events', async (req, res) => {
+            const result = await eventsCollection.find({}).toArray();
             res.send(result);
         })
 
