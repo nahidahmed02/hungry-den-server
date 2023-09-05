@@ -54,7 +54,7 @@ async function run() {
 
         // create payment intent
         app.post('/create-payment-intent', async (req, res) => {
-            const includingDeliveryChrg = req.body;
+            const { includingDeliveryChrg } = req.body;
             console.log(req.body);
             const amount = includingDeliveryChrg * 100;
             const paymentIntent = await stripe.paymentIntents.create({
