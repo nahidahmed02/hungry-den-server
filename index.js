@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require('cors');
+const stripe = require('stripe')(process.env.PAYMENT_SECRET_KEY);
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -46,6 +47,23 @@ async function run() {
                 return res.send({ accessToken: token })
             }
             res.status(403).send({ accessToken: '' })
+        })
+
+
+        // ==================== STRIPE PAYMENT ====================
+
+        // create payment intent
+        app.post('/create-payment-intent', async (req, res) => {
+            const { includingDeliveryChrg } = req.body;
+            const amount = includingDeliveryChrg * 100;
+            const paymentIntent = await stripe.paymentIntent.create({
+                amount: amount,
+                currency: 'usd',
+                payment_method_types: ['card']
+            });
+            res.send({
+                clientSecret: paymentIntent.client_secret
+            })
         })
 
 
