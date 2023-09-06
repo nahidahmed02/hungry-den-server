@@ -33,6 +33,7 @@ async function run() {
         const eventsCollection = client.db('hungryDen').collection('eventsCollection');
         const usersCollection = client.db('hungryDen').collection('usersCollection');
         const ordersCollection = client.db('hungryDen').collection('ordersCollection');
+        const paymentCollection = client.db('hungryDen').collection('paymentCollection');
         const reviewsCollection = client.db('hungryDen').collection('reviewsCollection');
 
 
@@ -57,14 +58,30 @@ async function run() {
             const { includingDeliveryChrg } = req.body;
             console.log(req.body);
             const amount = includingDeliveryChrg * 100;
-            const paymentIntent = await stripe.paymentIntents.create({
-                amount: amount,
-                currency: 'usd',
-                payment_method_types: ['card']
-            });
-            res.send({
-                clientSecret: paymentIntent.client_secret
-            })
+            try {
+                const paymentIntent = await stripe.paymentIntents.create({
+                    amount: amount,
+                    currency: 'usd',
+                    payment_method_types: ['card']
+                });
+                res.send({
+                    clientSecret: paymentIntent.client_secret
+                })
+            } catch (error) {
+                res.status(500).send({ error: error.message });
+
+            }
+
+        })
+
+
+        // ==================== PAYMENT HISTORY ====================
+
+        // to add payment to db
+        app.post('/payment', async (req, res) => {
+            const payment = req.body;
+            const result = await paymentCollection.insertOne(payment);
+            res.send(result);
         })
 
 
