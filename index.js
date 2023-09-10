@@ -70,7 +70,7 @@ async function run() {
         // ==================== STRIPE PAYMENT ====================
 
         // create payment intent
-        app.post('/create-payment-intent', async (req, res) => {
+        app.post('/create-payment-intent', verifyJWT, async (req, res) => {
             const { includingDeliveryChrg } = req.body;
             const amount = includingDeliveryChrg * 100;
 
@@ -92,7 +92,7 @@ async function run() {
         // ==================== PROFILE ====================
 
         // to get a profile
-        app.get('/profile/:email', async (req, res) => {
+        app.get('/profile/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const query = { email };
             const result = await profileCollection.find(query).toArray();
@@ -100,7 +100,7 @@ async function run() {
         })
 
         // to update a profile
-        app.put('/profile/:email', async (req, res) => {
+        app.put('/profile/:email', verifyJWT, async (req, res) => {
             const profile = req.body;
             const email = req.params.email;
             const query = { email };
@@ -120,20 +120,20 @@ async function run() {
         // ==================== FOODS ====================
 
         // to get all the foods
-        app.get('/foods', verifyJWT, async (req, res) => {
+        app.get('/foods', async (req, res) => {
             const foods = await foodsCollection.find({}).toArray();
             res.send(foods);
         })
 
         // to add new food
-        app.post('/foods', async (req, res) => {
+        app.post('/foods', verifyJWT, async (req, res) => {
             const food = req.body;
             const result = await foodsCollection.insertOne(food);
             res.send(result);
         })
 
         // to delete a food
-        app.delete('/foods/:id', async (req, res) => {
+        app.delete('/foods/:id', verifyJWT, async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await foodsCollection.deleteOne(query);
@@ -153,13 +153,13 @@ async function run() {
         // ==================== USERS ====================
 
         // to get all the users
-        app.get('/users', async (req, res) => {
+        app.get('/users', verifyJWT, async (req, res) => {
             const users = await usersCollection.find().toArray();
             res.send(users);
         })
 
         // to store the user
-        app.put('/users/:email', async (req, res) => {
+        app.put('/users/:email', verifyJWT, async (req, res) => {
             const user = req.body;
             const email = req.params.email;
             const query = { email };
@@ -172,7 +172,7 @@ async function run() {
         })
 
         // to give user the admin role
-        app.put('/users/admin/:email', async (req, res) => {
+        app.put('/users/admin/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
             const updatedDoc = {
@@ -183,7 +183,7 @@ async function run() {
         })
 
         // to give user the delivery man role
-        app.put('/users/dman/:email', async (req, res) => {
+        app.put('/users/dman/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
             const updatedDoc = {
@@ -194,7 +194,7 @@ async function run() {
         })
 
         // to remove from admin role
-        app.put('/admin/:email', async (req, res) => {
+        app.put('/admin/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
             const updatedDoc = {
@@ -205,7 +205,7 @@ async function run() {
         })
 
         // to remove from delivery man role
-        app.put('/dman/:email', async (req, res) => {
+        app.put('/dman/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
             const updatedDoc = {
@@ -219,13 +219,13 @@ async function run() {
         // ==================== ORDERS ====================
 
         // to get orders of all users
-        app.get('/order', async (req, res) => {
+        app.get('/order', verifyJWT, async (req, res) => {
             const orders = await ordersCollection.find({}).toArray();
             res.send(orders);
         })
 
         // to get order of an individual user
-        app.get('/order/:email', async (req, res) => {
+        app.get('/order/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const query = { email };
             const result = await ordersCollection.find(query).toArray();
@@ -233,14 +233,14 @@ async function run() {
         })
 
         // to place order
-        app.post('/order', async (req, res) => {
+        app.post('/order', verifyJWT, async (req, res) => {
             const order = req.body;
             const result = await ordersCollection.insertOne(order);
             res.send(result);
         })
 
         // to update order with a assigned delivery man
-        app.put('/order/assignDMan/:email', async (req, res) => {
+        app.put('/order/assignDMan/:email', verifyJWT, async (req, res) => {
             const dManInfo = req.body;
             const email = req.params.email;
             const query = { email };
@@ -256,7 +256,7 @@ async function run() {
         })
 
         // to update an order by completing delivery
-        app.put('/order/completed/:email', async (req, res) => {
+        app.put('/order/completed/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const query = { email };
             const updatedDoc = {
@@ -277,7 +277,7 @@ async function run() {
         })
 
         // to get individual user's review
-        app.get('/reviews/:email', async (req, res) => {
+        app.get('/reviews/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
             const query = { email };
             const result = await reviewsCollection.find(query).toArray();
@@ -285,14 +285,14 @@ async function run() {
         })
 
         // to add reviews in DB
-        app.post('/reviews', async (req, res) => {
+        app.post('/reviews', verifyJWT, async (req, res) => {
             const review = req.body;
             const result = await reviewsCollection.insertOne(review);
             res.send(result);
         })
 
         // to delete a review
-        app.delete('/reviews/:id', async (req, res) => {
+        app.delete('/reviews/:id', verifyJWT, async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await reviewsCollection.deleteOne(query);
