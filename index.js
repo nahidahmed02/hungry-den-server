@@ -12,6 +12,23 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 app.use(cors());
 app.use(express.json());
 
+const verifyJWT = (req, res, next) => {
+
+    const authorization = req.headers.authorization;
+    if (!authorization) {
+        return res.status(401).send({ message: 'Unauthorized Access' })
+    }
+
+    const token = authorization.split(' ')[1];
+    jwt.verify(token, process.env.ACCESS_TOKEN, function (err, decode) {
+        if (err) {
+            return res.status(403).send({ message: 'Forbidden Access' })
+        }
+        req.decode = decode;
+        next();
+    })
+}
+
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.2tc2nkt.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
@@ -103,7 +120,7 @@ async function run() {
         // ==================== FOODS ====================
 
         // to get all the foods
-        app.get('/foods', async (req, res) => {
+        app.get('/foods', verifyJWT, async (req, res) => {
             const foods = await foodsCollection.find({}).toArray();
             res.send(foods);
         })
