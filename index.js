@@ -159,7 +159,7 @@ async function run() {
         })
 
         // to store the user
-        app.put('/users/:email', verifyJWT, async (req, res) => {
+        app.put('/users/:email', async (req, res) => {
             const user = req.body;
             const email = req.params.email;
             const query = { email };
@@ -168,7 +168,8 @@ async function run() {
             };
             const options = { upsert: true };
             const result = await usersCollection.updateOne(query, updatedDoc, options);
-            res.send(result);
+            const token = jwt.sign({ email }, process.env.ACCESS_TOKEN);
+            res.send({ result, token });
         })
 
         // to give user the admin role
