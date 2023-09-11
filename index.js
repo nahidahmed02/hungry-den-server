@@ -172,6 +172,16 @@ async function run() {
             res.send({ result, token });
         })
 
+        // to get the admin
+        app.get('/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await usersCollection.findOne(query);
+            console.log(email);
+            const isAdmin = user.role === 'Admin';
+            res.send({ admin: isAdmin });
+        })
+
         // to give user the admin role
         app.put('/users/admin/:email', verifyJWT, async (req, res) => {
             const email = req.params.email;
