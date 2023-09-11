@@ -177,7 +177,6 @@ async function run() {
             const email = req.params.email;
             const query = { email };
             const user = await usersCollection.findOne(query);
-            console.log(email);
             const isAdmin = user.role === 'Admin';
             res.send({ admin: isAdmin });
         })
@@ -191,6 +190,15 @@ async function run() {
             }
             const result = await usersCollection.updateOne(query, updatedDoc);
             res.send(result);
+        })
+
+        // to get the delivery man
+        app.get('/dman/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await usersCollection.findOne(query);
+            const isDMan = user.role === 'D. Man';
+            res.send({ dMan: isDMan });
         })
 
         // to give user the delivery man role
