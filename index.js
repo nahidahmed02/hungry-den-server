@@ -69,6 +69,21 @@ async function run() {
             }
         }
 
+        // =================================== TO VERIFY IF THE USER IS A DELIVERY MAN ===================================
+
+        const verifyDMan = async (req, res, next) => {
+            const requester = req.decode.email;
+            const query = { email: requester };
+            const requesterAccount = await usersCollection.findOne(query);
+
+            if (requesterAccount.role === 'D. Man') {
+                next();
+            }
+            else {
+                req.status(403).send({ message: 'Forbidden Access' })
+            }
+        }
+
         // ===================================================== JWT =====================================================
 
         app.get('/jwt', async (req, res) => {
