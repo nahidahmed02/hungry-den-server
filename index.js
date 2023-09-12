@@ -157,14 +157,14 @@ async function run() {
         })
 
         // to add new food
-        app.post('/foods', verifyJWT, async (req, res) => {
+        app.post('/foods', verifyJWT, verifyAdmin, async (req, res) => {
             const food = req.body;
             const result = await foodsCollection.insertOne(food);
             res.send(result);
         })
 
         // to delete a food
-        app.delete('/foods/:id', verifyJWT, async (req, res) => {
+        app.delete('/foods/:id', verifyJWT, verifyAdmin, async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await foodsCollection.deleteOne(query);
@@ -184,7 +184,7 @@ async function run() {
         // ==================================================== USERS ====================================================
 
         // to get all the users
-        app.get('/users', verifyJWT, async (req, res) => {
+        app.get('/users', verifyJWT, verifyAdmin, async (req, res) => {
             const users = await usersCollection.find().toArray();
             res.send(users);
         })
@@ -213,7 +213,7 @@ async function run() {
         })
 
         // to give user the admin role
-        app.put('/users/admin/:email', verifyJWT, async (req, res) => {
+        app.put('/users/admin/:email', verifyJWT, verifyAdmin, async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
             const updatedDoc = {
@@ -233,7 +233,7 @@ async function run() {
         })
 
         // to give user the delivery man role
-        app.put('/users/dman/:email', verifyJWT, async (req, res) => {
+        app.put('/users/dman/:email', verifyJWT, verifyAdmin, async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
             const updatedDoc = {
@@ -244,7 +244,7 @@ async function run() {
         })
 
         // to remove from admin role
-        app.put('/admin/:email', verifyJWT, async (req, res) => {
+        app.put('/admin/:email', verifyJWT, verifyAdmin, async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
             const updatedDoc = {
@@ -255,7 +255,7 @@ async function run() {
         })
 
         // to remove from delivery man role
-        app.put('/dman/:email', verifyJWT, async (req, res) => {
+        app.put('/dman/:email', verifyJWT, verifyAdmin, async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
             const updatedDoc = {
@@ -269,7 +269,7 @@ async function run() {
         // =================================================== ORDERS ===================================================
 
         // to get orders of all users
-        app.get('/order', verifyJWT, async (req, res) => {
+        app.get('/order', verifyJWT, verifyAdmin, async (req, res) => {
             const orders = await ordersCollection.find({}).toArray();
             res.send(orders);
         })
@@ -290,7 +290,7 @@ async function run() {
         })
 
         // to update order with a assigned delivery man
-        app.put('/order/assignDMan/:email', verifyJWT, async (req, res) => {
+        app.put('/order/assignDMan/:email', verifyJWT, verifyAdmin, async (req, res) => {
             const dManInfo = req.body;
             const email = req.params.email;
             const query = { email };
@@ -306,7 +306,7 @@ async function run() {
         })
 
         // to update an order by completing delivery
-        app.put('/order/completed/:email', verifyJWT, async (req, res) => {
+        app.put('/order/completed/:email', verifyJWT, verifyDMan, async (req, res) => {
             const email = req.params.email;
             const query = { email };
             const updatedDoc = {
