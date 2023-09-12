@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
-// middleware
+// ====================================================== MIDDLEWARE ======================================================
 app.use(cors());
 app.use(express.json());
 
@@ -44,7 +44,8 @@ async function run() {
     try {
         await client.connect();
 
-        // ==================== COLLECTIONS ====================
+        // ================================================= COLLECTIONS =================================================
+
         const profileCollection = client.db('hungryDen').collection('profileCollection');
         const foodsCollection = client.db('hungryDen').collection('foodsCollection');
         const eventsCollection = client.db('hungryDen').collection('eventsCollection');
@@ -53,7 +54,22 @@ async function run() {
         const reviewsCollection = client.db('hungryDen').collection('reviewsCollection');
 
 
-        // ======================== JWT ========================
+        // ====================================== TO VERIFY IF THE USER IS AN ADMIN ======================================
+
+        const verifyAdmin = async (req, res, next) => {
+            const requester = req.decode.email;
+            const query = { email: requester };
+            const requesterAccount = await usersCollection.findOne(query);
+
+            if (requesterAccount.role === 'Admin') {
+                next();
+            }
+            else {
+                req.status(403).send({ message: 'Forbidden Access' })
+            }
+        }
+
+        // ===================================================== JWT =====================================================
 
         app.get('/jwt', async (req, res) => {
             const email = req.query.email;
@@ -67,7 +83,7 @@ async function run() {
         })
 
 
-        // ==================== STRIPE PAYMENT ====================
+        // ================================================== STRIPE PAYMENT =============================================
 
         // create payment intent
         app.post('/create-payment-intent', verifyJWT, async (req, res) => {
@@ -89,7 +105,7 @@ async function run() {
         })
 
 
-        // ==================== PROFILE ====================
+        // =================================================== PROFILE ===================================================
 
         // to get a profile
         app.get('/profile/:email', verifyJWT, async (req, res) => {
@@ -117,7 +133,7 @@ async function run() {
         })
 
 
-        // ==================== FOODS ====================
+        // ==================================================== FOODS ====================================================
 
         // to get all the foods
         app.get('/foods', async (req, res) => {
@@ -141,7 +157,7 @@ async function run() {
         })
 
 
-        // ==================== EVENTS ====================
+        // ==================================================== EVENTS ====================================================
 
         // to get all events
         app.get('/events', async (req, res) => {
@@ -150,7 +166,7 @@ async function run() {
         })
 
 
-        // ==================== USERS ====================
+        // ==================================================== USERS ====================================================
 
         // to get all the users
         app.get('/users', verifyJWT, async (req, res) => {
@@ -235,7 +251,7 @@ async function run() {
         })
 
 
-        // ==================== ORDERS ====================
+        // =================================================== ORDERS ===================================================
 
         // to get orders of all users
         app.get('/order', verifyJWT, async (req, res) => {
@@ -287,7 +303,7 @@ async function run() {
         })
 
 
-        // ==================== REVIEWS ====================
+        // =================================================== REVIEWS ===================================================
 
         // to get all the reviews
         app.get('/reviews', async (req, res) => {
