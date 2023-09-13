@@ -290,10 +290,10 @@ async function run() {
         })
 
         // to update order with a assigned delivery man
-        app.put('/order/assignDMan/:email', verifyJWT, verifyAdmin, async (req, res) => {
+        app.put('/order/assignDMan/:id', verifyJWT, verifyAdmin, async (req, res) => {
             const dManInfo = req.body;
-            const email = req.params.email;
-            const query = { email };
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
             const updatedDoc = {
                 $set: {
                     deliveryStatus: 'On Shipment',
@@ -306,9 +306,9 @@ async function run() {
         })
 
         // to update an order by completing delivery
-        app.put('/order/completed/:email', verifyJWT, verifyDMan, async (req, res) => {
-            const email = req.params.email;
-            const query = { email };
+        app.put('/order/completed/:id', verifyJWT, verifyDMan, async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
             const updatedDoc = {
                 $set: { deliveryStatus: 'Completed' }
             };
