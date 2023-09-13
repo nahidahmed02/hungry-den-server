@@ -75,7 +75,7 @@ async function run() {
             const requester = req.decode.email;
             const query = { email: requester };
             const requesterAccount = await usersCollection.findOne(query);
-
+            console.log(requesterAccount);
             if (requesterAccount.role === 'D. Man') {
                 next();
             }
@@ -269,7 +269,7 @@ async function run() {
         // =================================================== ORDERS ===================================================
 
         // to get orders of all users
-        app.get('/order', verifyJWT, verifyAdmin, async (req, res) => {
+        app.get('/order', verifyJWT, async (req, res) => {
             const orders = await ordersCollection.find({}).toArray();
             res.send(orders);
         })
