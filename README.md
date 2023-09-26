@@ -16,7 +16,7 @@
 * If a user forgets their password, they can reset it
 * A user of one role won't have access to the routes intended for a user of another role
 * Logged-in users can place food orders
-* For home delivery, users can choose between cash on delivery or online payment
+* For home delivery, users have the option to choose between cash on delivery or make an online payment using Stripe JS
 * The dashboard will be customized according to the logged-in user's role
 * Users will be able to edit their profiles, including uploading photos
 * After receiving an order, the admin will assign it to a delivery person
