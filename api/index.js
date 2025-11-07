@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 5000;
 const cors = require('cors');
 const stripe = require('stripe')(process.env.PAYMENT_SECRET_KEY);
 require('dotenv').config();
@@ -29,6 +28,9 @@ const verifyJWT = (req, res, next) => {
     })
 }
 
+app.get('/', async (req, res) => {
+    res.send('hungry den server');
+});
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.2tc2nkt.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
@@ -43,10 +45,6 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         await client.connect();
-
-        app.get('/', (req, res) => {
-            res.send('hungry den server');
-        });
 
         // ================================================= COLLECTIONS =================================================
 
