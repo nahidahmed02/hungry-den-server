@@ -44,6 +44,10 @@ async function run() {
     try {
         await client.connect();
 
+        app.get('/', (req, res) => {
+            res.send('hungry den server');
+        });
+
         // ================================================= COLLECTIONS =================================================
 
         const profileCollection = client.db('hungryDen').collection('profileCollection');
@@ -356,11 +360,4 @@ async function run() {
 }
 run().catch(console.dir);
 
-
-app.get('/', (req, res) => {
-    res.send('hungry den server');
-});
-
-app.listen(port, () => {
-    console.log('listening to port', port);
-});
+module.exports = app;
