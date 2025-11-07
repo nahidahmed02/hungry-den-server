@@ -67,7 +67,7 @@ async function run() {
                 next();
             }
             else {
-                req.status(403).send({ message: 'Forbidden Access' })
+                res.status(403).send({ message: 'Forbidden Access' })
             }
         }
 
@@ -82,7 +82,7 @@ async function run() {
                 next();
             }
             else {
-                req.status(403).send({ message: 'Forbidden Access' })
+                res.status(403).send({ message: 'Forbidden Access' })
             }
         }
 
@@ -352,8 +352,8 @@ async function run() {
         })
 
 
-    } finally {
-
+    } catch (error) {
+        console.error("Database connection failed:", error);
     }
 }
 run().catch(console.dir);
